@@ -60,14 +60,26 @@ void MapDataThread(Action<MapData> callback){
 	}
 }
 
-public void RequestMeshData(MapData mapData, Action<MeshData> callback) {
 
+
+// MeshData Thread
+public void RequestMeshData(MapData mapData, Action<MeshData> callback) {
+	ThreadStart threadStart = delegate {
+		MeshDataThread (mapData, callback);
+	};
+	new Thread (threadStart).Start();
 }
 
 void MeshDataThread(MapData mapData, Action<MeshData> callback) {
-	MeshData meshData = MeshGenerator.GenerateTerrainMesh (mapData.heightMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail);
+	MeshData meshData = MeshGenerator.GenerateTerrainMesh (
+	mapData.heightMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail
+	);
 	lock (meshDataThreadInfoQueue) {
-		meshDataThreadInfoQueue.Enqueue (new MapThreadInfo<MeshData> (callback, meshData));
+		meshDataThreadInfoQueue.Enqueue (
+			new MapThreadInfo<MeshData> (
+				callback, meshData
+			)
+		);
 	}
 }
 
