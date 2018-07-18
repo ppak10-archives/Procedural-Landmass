@@ -55,6 +55,7 @@ public class EndlessTerrain : MonoBehaviour {
 
 		public TerrainChunk(Vector2 coord, int size, Transform parent) {
 			position = coord*size;
+			bounds = new Bounds(position,Vector2.one *size);
 			Vector3 positionV3 = new Vector3(position.x, 0, position.y);
 
 			meshObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
